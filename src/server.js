@@ -12,9 +12,10 @@ import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import cluster from "cluster";
 import { cpus } from "os";
-import { logger } from "./config/logger.js";
+import { logger,ErrorLogger } from "./config/logger.js";
 import {MongoDBService} from './db/mongoDBService.js';
 import {HandlerMongoDB} from './db/mongoHandler.js';
+import {transporter,mailOptions} from './config/mailer.js'
 
 MongoDBService.initMongoDB(); 
 initializePassport();
@@ -132,6 +133,12 @@ app.post(
   "/register",
   passport.authenticate("register", { failureRedirect: "/registerfail" }),
   async (req, res) => {
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      WarnLogger.info("mail de registro enviado");    
+    } catch (error) {
+      ErrorLogger.error("error en mail de registro");
+    }
     res.redirect("/home");
   }
 );
@@ -184,3 +191,7 @@ console.log("args ->", process.argv.slice(2));
 // taskkill /f /im nginx.exe
 // taskkill /f /im pm2.exe
 // pm2 start ecosystem.config.cjs
+// Name:	Noemi Feil
+// Username:	noemi.feil@ethereal.email 
+// Password:	TQTNSbWZfZvbTe9bgV
+
