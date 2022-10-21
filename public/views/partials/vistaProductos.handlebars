@@ -4,9 +4,11 @@
             <div class="titleHeader"><h5 class="titleNombre">Nombre</h5><h5 class="titlePrecio">Precio</h5><h5 class="titleFoto">Foto</h5></div>
             {{#each products}}
                 <div class="productData">
-                    <div class="productTitle"><h5> {{this.title}}</h5></div>
-                    <div class="productPrice"><h5>${{this.price}}</h5></div>
-                    <div class="productThumbnail"><img src={{this.thumbnail}} alt=""></img></div>
+                    <div class="productTitle"><h5 id="productTitle"> {{this.title}}</h5></div>
+                    <div class="productPrice"><h5 id="productPrice">${{this.price}}</h5></div>
+                     <div class="productPrice"><h5 id="productPrice">id:{{this.id}}</h5></div>
+                    <button class="btnAdd" id="btnAdd">Agregar al carrito</button>
+                    <div class="productThumbnail"><img id="productThumbnail"  src={{this.thumbnail}} alt=""></img></div>
                 </div>
             {{/each}}
 

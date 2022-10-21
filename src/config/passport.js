@@ -12,14 +12,19 @@ const initializePassport = () => {
       { passReqToCallback: true, usernameField: "email" },
       async (req, email, password, done) => {
         try {
-          const { name } = req.body;
-          if (!name || !email || !password) return done(null, false);
+          const { name,direccion,edad,telefono,foto,prefijo } = req.body;
+          if (!name || !email || !password ) return done(null, false);
           let exists = await usersModel.findOne({ email: email });
           if (exists) return done(null, false);
           let result = await usersModel.create({
             name,
             email,
             password: createHash(password),
+            direccion,
+            edad,
+            telefono,
+            prefijo,
+            foto
           });
           return done(null, result);
         } catch (error) {

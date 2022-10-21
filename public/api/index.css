@@ -266,6 +266,24 @@ body {
 .productPrice {
   width: 30%;
   text-align: left;
+ ;
+}
+
+.btnAdd {
+  width: 30%;
+  background-color: #2c0b8e;
+  color: #efefef;
+  margin: 10px;
+  border-style: hidden;
+  border-radius: 30px;
+}
+
+.btnAdd:hover {
+  background-color: #efefef;
+  color: #2c0b8e;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #2c0b8e;
 }
 
 .titleFoto,

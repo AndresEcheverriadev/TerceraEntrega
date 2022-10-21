@@ -1,6 +1,6 @@
-import {productsModel} from '../db/dbModels.js'
+import {productsModel} from './dbModels.js'
 
-class HandlerMongoDB {
+class HandlerDBProductos {
   constructor() {
     this.collection = productsModel;
   }
@@ -60,4 +60,4 @@ class HandlerMongoDB {
     };
 }; 
 
-export { HandlerMongoDB };
+export { HandlerDBProductos };

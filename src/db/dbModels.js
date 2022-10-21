@@ -3,19 +3,27 @@ import mongoose from 'mongoose';
 const collectionUsers = "users";
 const collectionProducts= "products";
 
-const usersSchema = mongoose.Schema({
-    name:String,
-    email:String,
-    password:String
-})
-
 const productsSchema = mongoose.Schema({
     title:String,
     price:Number,
     thumbnail:String,
-    stock:Number
+    stock:Number,
+    id:Number
 })
 
-const usersModel = mongoose.model(collectionUsers,usersSchema);
+const usersSchema = mongoose.Schema({
+    name:String,
+    email:String,
+    direccion:String,
+    edad:Number,
+    password:String,
+    telefono:Number,
+    prefijo:String,
+    foto:String,
+    carrito:Array
+})
+
 const productsModel = mongoose.model(collectionProducts,productsSchema);
-export  {usersModel ,productsModel};
+const usersModel = mongoose.model(collectionUsers,usersSchema);
+
+export  { productsModel,usersModel };

@@ -14,7 +14,8 @@ import cluster from "cluster";
 import { cpus } from "os";
 import { logger,ErrorLogger } from "./config/logger.js";
 import {MongoDBService} from './db/mongoDBService.js';
-import {HandlerMongoDB} from './db/mongoHandler.js';
+import {HandlerDBProductos} from './db/mongoHandlerProducts.js';
+import {HandlerDBCarts} from './db/mongoHandlerCarts.js';
 import {transporter,mailOptions} from './config/mailer.js'
 
 MongoDBService.initMongoDB(); 
@@ -53,7 +54,8 @@ const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 const PORT = config.Port;
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
-const Product = new HandlerMongoDB
+const Product = new HandlerDBProductos
+const Cart = new HandlerDBCarts
 
 
 app.use(express.json());
@@ -101,7 +103,7 @@ app.get("/", (req, res) => {
 app.get("/home", (req, res) => {
   req.logger.info("peticion recibida al servidor desde /home");
   req.session.contador++;
-  res.render("vistaContenedor", { user: req.user.email});
+  res.render("vistaContenedor", { name: req.user.name});
 });
 
 app.get("/login", (req, res) => {
@@ -173,7 +175,17 @@ app.get("*", function (req, res) {
 io.on("connection", async (socket) => {
   console.log(`Cliente conectado en ${socket.id}`);
   socket.emit("products", await Product.listarTodo());
+  
+  socket.on("addToCart", ({ id,title,price,thumbnail }) => {
+    const producto = { title,price,thumbnail };
+    Cart.agregarAlCarrito(producto);
+    socket.emit("products", Product.listarTodo());
 });
+
+});
+
+
+
 
 const server = httpServer.listen(process.env.PORT || PORT , () => {
   console.log(`Servidor escuchando en puerto ${PORT}`);

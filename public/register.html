@@ -24,8 +24,27 @@
                     <input id="loginNombre" class="inputSpace"  type="text" name="email"></input>
                 </div>
                 <div class="input">
+                    <label for="direccion">Dirección:</label>
+                    <input id="loginNombre" class="inputSpace"  type="text" name="direccion"></input>
+                </div>
+                <div class="input">
+                    <label for="edad">Edad:</label>
+                    <input id="loginNombre" class="inputSpace"  type="number" name="edad"></input>
+                </div>
+                <div class="input">
+                    <label for="telefono">Telefono:</label>
+                    <select class="inputSpace" name="prefijo" id="prefijo">
+                        <option value="elegir">País</option>
+                    </select>
+                    <input id="inputTelefono" class="inputSpace"  type="number" name="telefono"></input>
+                </div>
+                <div class="inputImage">
+                    <label for="foto">Subir imagen de perfil:</label>
+                    <div class="inputImageContainer"><input id="image" class="inputSpaceImg"  type="file" name="foto" accept="image/png, image/jpeg"></input></div>
+                </div>
+                <div class="input">
                     <label for="password">Contraseña:</label>
-                    <input id="loginEmail" class="inputSpace"  type="text" name="password"></input>
+                    <input id="loginEmail" class="inputSpace"  type="password" name="password"></input>
                 </div>
                 <div class="loginButton">
                     <input id="btnLogin" class="css-button-sliding-to-top--blue" type="submit" value="Registrarse">
@@ -35,6 +54,7 @@
             </form>
         </div>
     </div>
+    <script src='prefix.js'></script>
 </body>
 
 </html>
