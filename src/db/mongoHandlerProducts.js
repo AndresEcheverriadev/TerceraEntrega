@@ -8,6 +8,7 @@ class HandlerDBProductos {
     async listarTodo() {
         try {
           const all = await this.collection.find({});
+          console.log(all)
           return all;
         } catch (error) {
           return error;

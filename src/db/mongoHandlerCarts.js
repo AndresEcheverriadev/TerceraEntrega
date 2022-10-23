@@ -1,22 +1,27 @@
-import {usersModel} from './dbModels.js'
+import {usersModel,productsModel} from './dbModels.js'
 
 class HandlerDBCarts {
   constructor() {
     this.collection = usersModel;
+    this.product = productsModel;
   }
 
-    async listarTodo() {
+    async listarCarrito(id) {
+      // const user = await this.collection.findOne({id: id});
         try {
-          const all = await this.collection.find({});
+          const all = await this.collection.find({id: id},{'carrito': {}});
           return all;
         } catch (error) {
           return error;
         }
     };
 
-    async agregarAlCarrito(id,title,price,thumbnail,stock) {
+    async agregarAlCarrito(id) {
+      console.log('data recibida'+ id);
+      const product = await this.product.findOne({id: id}) 
+      console.log(product)
       try {
-        const newElement =  await this.collection.updateOne({carrito: []}, {$push: {title,price,thumbnail,stock}});
+        const newElement =  await this.collection.findOneAndUpdate( { id: 1},{ $push: { "carrito": product }} );
         return newElement;
       } catch (error) {
         return error;

@@ -6,8 +6,7 @@
                 <div class="productData">
                     <div class="productTitle"><h5 id="productTitle"> {{this.title}}</h5></div>
                     <div class="productPrice"><h5 id="productPrice">${{this.price}}</h5></div>
-                     <div class="productPrice"><h5 id="productPrice">id:{{this.id}}</h5></div>
-                    <button class="btnAdd" id="btnAdd">Agregar al carrito</button>
+                    <button class="btnAdd" id={{this.id}}>Agregar al carrito</button>
                     <div class="productThumbnail"><img id="productThumbnail"  src={{this.thumbnail}} alt=""></img></div>
                 </div>
             {{/each}}
@@ -15,5 +14,7 @@
             {{else}}
                 <h2 class="title">No hay productos</h2>
         {{/if}}
-        <script src='/api/index.js'></script>
+
 </div>
+
+<script src='/api/index.js'></script>

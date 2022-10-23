@@ -175,11 +175,12 @@ app.get("*", function (req, res) {
 io.on("connection", async (socket) => {
   console.log(`Cliente conectado en ${socket.id}`);
   socket.emit("products", await Product.listarTodo());
+  // socket.emit("carrito", await Cart.listarCarrito(1));
+  socket.emit("carrito", [{title:'demoproduct',price:100,id:1,thumbnail:'copy.jpg'}]);
   
-  socket.on("addToCart", ({ id,title,price,thumbnail }) => {
-    const producto = { title,price,thumbnail };
+  socket.on("addToCart", ({id}) => {
+    const producto =  parseInt(id);
     Cart.agregarAlCarrito(producto);
-    socket.emit("products", Product.listarTodo());
 });
 
 });

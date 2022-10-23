@@ -1,0 +1,17 @@
+<div id="carritoView" class="carritoContainer">  
+    <h2 class="carritoTitle">Tu carrito</h2>
+        {{#if carrito.length}}
+            {{#each carrito}}
+                <div class="carritoProductoData">
+                    <h5 id="carritoProductoTitle"> {{this.title}}</h5>
+                    <h5 id="carritoProductoPrice">${{this.price}}</h5>
+                    <button class="btnRemove" id={{this.id}}>Quitar del carrito</button>
+                    <img id="productThumbnail"  src={{this.thumbnail}} alt=""></img>
+                </div>
+            {{/each}}
+
+            {{else}}
+                <h2 class="title">No hay productos en tu carrito</h2>
+        {{/if}}
+        {{!-- <script src='/api/index.js'></script> --}}
+</div>
