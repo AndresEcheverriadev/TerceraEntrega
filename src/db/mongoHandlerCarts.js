@@ -19,22 +19,35 @@ class HandlerDBCarts {
         }
     };
 
-    async agregarAlCarrito(id,usuario) {
+    async agregarAlCarrito(idProducto,idUsuario) {
     
-      const product = await this.product.findOne({id: id}) 
-      console.log(product)
+      const product = await this.product.findOne({id: idProducto}) 
+      console.log('data recibida en funcion db: '+ product);
+
       try {
-        const newElement =  await this.collection.findOneAndUpdate( { id: 1},{ $push: { "carrito": product }} );
+        const newElement =  await this.collection.findOneAndUpdate( { id: idUsuario},{ $push: { "carrito": product }} );
         return newElement;
       } catch (error) {
         return error;
       }
     };
 
-    async borrarCarrito(id) {
+    async borrarDelCarrito(idProducto,idUsuario) {
+    
+      const product = await this.product.findOne({id: idProducto}) 
+      console.log(product)
+      try {
+        const clearElement =  await this.collection.findOneAndUpdate( { id: idUsuario},{ $pull: { "carrito": product }} );
+        return clearElement;
+      } catch (error) {
+        return error;
+      }
+    };
+
+    async borrarCarrito(idUsuario) {
       console.log('function borrarCarrito');
         try {
-          const carritoCleared = await this.collection.updateOne({id: 1},{ $set: { "carrito": [] }});
+          const carritoCleared = await this.collection.updateOne({id: idUsuario},{ $set: { "carrito": [] }});
           return carritoCleared;
         } catch (error) {
           return error;

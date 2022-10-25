@@ -18,10 +18,11 @@ const createProductView = async (products) => {
 socket.on("carrito", async (carrito) => {
   const template = await createCarritoView(carrito);
   document.getElementById("carritoView").innerHTML = template;
-  // btn = document.getElementsByClassName("btnAdd");
-  // for (index = 0; index < btn.length; ++index) {  
-  //   btn[index].addEventListener("click", addToCart );
-  // }
+  const btnQuitar = document.getElementsByClassName("btnRemove");
+  for (index = 0; index < btnQuitar.length; ++index) {  
+    btnQuitar[index].addEventListener("click", removeFromCart );
+  }
+
   const btnBorrar = document.getElementById("btnBorrar");
   btnBorrar.addEventListener('click',clearCart);
 });
@@ -33,10 +34,14 @@ const createCarritoView = async (carrito) => {
 };
 
 function addToCart() {
-  socket.emit("addToCart", {id: this.id});
+  socket.emit("addToCart", {idProducto: this.id});
+}
+
+function removeFromCart() {
+  socket.emit("removeFromCart", {idProducto: this.id,idUsuario:this.name});
 }
 
 function clearCart() {
   console.log('btn clear');
-  socket.emit("clearCart", {id: this.id});
+  socket.emit("clearCart",{idUsuario: 1});
 }

@@ -172,21 +172,35 @@ app.get("*", function (req, res) {
   res.status(404).send("Esta página no existe");
 });
 
-io.on("connection", async (socket) => {
+io.on("connection", async (socket,req) => {
+  
+  const userName = req.user.name
+  
+
   console.log(`Cliente conectado en ${socket.id}`);
-  socket.emit("products", await Product.listarTodo());
+
+  socket.emit("products", await Product.listarTodo(),userName);
   socket.emit("carrito", await Cart.listarCarrito(1));
   
-  socket.on("addToCart", async ({id,usuario}) => {
-    const producto =  parseInt(id);
+  socket.on("addToCart", async ({idProducto,idUsuario}) => {
+    const producto =  parseInt(idProducto);
+    const usuario = 1;
+    console.log('data from productos: '+idProducto+' '+producto);
     const carrito = await Cart.agregarAlCarrito(producto,usuario);
-    io.sockets.emit("carrito", await Cart.listarCarrito(1));
+    io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
   });
 
-  socket.on("clearCart", async ({id}) => {
-    const usuario =  parseInt(id);
+  socket.on("removeFromCart", async ({idProducto,idUsuario}) => {
+    const producto =  parseInt(idProducto);
+    const usuario = 1;
+    const carrito = await Cart.borrarDelCarrito(producto,usuario);
+    io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
+  });
+
+  socket.on("clearCart", async ({idUsuario}) => {
+    const usuario =  idUsuario;
     const carritoNuevo = await Cart.borrarCarrito(usuario);
-    io.sockets.emit("carrito", await Cart.listarCarrito(1));
+    io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
   });
 
 });
