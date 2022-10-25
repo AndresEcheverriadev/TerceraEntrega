@@ -387,7 +387,7 @@ form {
   width: 40%;
   text-align: center;
 }
-
+/* 
 .productData {
   display: flex;
   flex-direction: row;
@@ -406,4 +406,4 @@ form {
 .productThumbnail img {
   width: 200px;
   height: auto;
-}
+} */

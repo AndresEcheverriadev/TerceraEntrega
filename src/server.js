@@ -175,13 +175,19 @@ app.get("*", function (req, res) {
 io.on("connection", async (socket) => {
   console.log(`Cliente conectado en ${socket.id}`);
   socket.emit("products", await Product.listarTodo());
-  // socket.emit("carrito", await Cart.listarCarrito(1));
-  socket.emit("carrito", [{title:'demoproduct',price:100,id:1,thumbnail:'copy.jpg'}]);
+  socket.emit("carrito", await Cart.listarCarrito(1));
   
-  socket.on("addToCart", ({id}) => {
+  socket.on("addToCart", async ({id,usuario}) => {
     const producto =  parseInt(id);
-    Cart.agregarAlCarrito(producto);
-});
+    const carrito = await Cart.agregarAlCarrito(producto,usuario);
+    io.sockets.emit("carrito", await Cart.listarCarrito(1));
+  });
+
+  socket.on("clearCart", async ({id}) => {
+    const usuario =  parseInt(id);
+    const carritoNuevo = await Cart.borrarCarrito(usuario);
+    io.sockets.emit("carrito", await Cart.listarCarrito(1));
+  });
 
 });
 

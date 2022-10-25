@@ -2,5 +2,8 @@
 <div></div>
 <button class="css-button-sliding-to-top--blue " id='logoutbtn' onclick="location.href='/logout'">Logout</button>
 <br>
-{{>vistaProductos}}
-{{>vistaCarrito}}
+<div class="mainContenedor">
+    {{>vistaProductos}}
+    {{>vistaCarrito}}       
+</div>
+<script src='/api/index.js'></script>

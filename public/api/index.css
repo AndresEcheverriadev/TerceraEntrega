@@ -234,7 +234,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 700px;
+  width:auto;
   height: auto;
   background-color: #efefef;
   border-style: solid;
@@ -286,6 +286,22 @@ body {
   border-color: #2c0b8e;
 }
 
+.btnRemove {
+  width: 30%;
+  color: #2c0b8e;
+  margin: 10px;
+  border-style: hidden;
+  border-radius: 30px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #2c0b8e;
+}
+
+.btnRemove:hover {
+  color: #efefef;
+  background-color: #2c0b8e;
+}
+
 .titleFoto,
 .productThumbnail {
   width: 40%;
@@ -297,7 +313,7 @@ body {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 600px;
   height: auto;
   border-style: solid;
   border-color: #2c0b8e;
@@ -310,4 +326,101 @@ body {
 .productThumbnail img {
   width: 200px;
   height: auto;
+}
+
+.carritoProductoData {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  border-style: solid;
+  border-color: #2c0b8e;
+  border-width: 2px;
+  border-radius: 10px;
+  gap: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  width:100%;
+  height: auto;
+}
+
+.carritoProductoData #ProductTitle {
+  width: 50%;
+  text-align: left;
+}
+
+.carritoProductoData #carritoProductoPrice {
+  width: 20%;
+  text-align: left;
+}
+
+.carritoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width:auto;
+  height: auto;
+  background-color: #efefef;
+  border-style: solid;
+  border-color: transparent;
+  border-width: 2px;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.mainContenedor {
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items: flex-start;
+  width: 100%;
+  height: auto;
+  gap: 10px;
+}
+
+.carritoButtonsContainer {
+  display: flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  gap: 30px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.totalText {
+  margin-top: 10px;
+  border-top-color: #2c0b8e;
+  border-top-width: 2px;
+  border-top-style: solid ;
+  width: 100%;
+  color: #2c0b8e;
+}
+
+.btnPagar {
+  background-color: #2c0b8e;
+  color: #efefef;
+  margin: 10px;
+  border-style: hidden;
+  border-radius: 30px;
+  padding: 10px;
+  margin-top: 10px;
+  width: 100%;
+  height: auto;
+}
+
+.btnPagar:hover { 
+  background-color: #efefef;
+  color: #2c0b8e;
+  border-style: solid;
+  border-color: #2c0b8e;
+  border-width: 2px;
+}
+
+.btnBorrar {
+  color: #2c0b8e;
+  border-style: hidden;
 }

@@ -7,17 +7,20 @@ class HandlerDBCarts {
   }
 
     async listarCarrito(id) {
+      console.log('data recibida desde server'+ id);
       // const user = await this.collection.findOne({id: id});
         try {
-          const all = await this.collection.find({id: id},{'carrito': {}});
-          return all;
+          const usuario = await this.collection.findOne({id: 1});
+          const carrito = usuario.carrito
+          // console.log('all recibido desde mongo:'+ carrito)
+          return carrito;
         } catch (error) {
           return error;
         }
     };
 
-    async agregarAlCarrito(id) {
-      console.log('data recibida'+ id);
+    async agregarAlCarrito(id,usuario) {
+    
       const product = await this.product.findOne({id: id}) 
       console.log(product)
       try {
@@ -26,16 +29,26 @@ class HandlerDBCarts {
       } catch (error) {
         return error;
       }
-  };
+    };
 
-    async borrarCarrito() {
+    async borrarCarrito(id) {
+      console.log('function borrarCarrito');
         try {
-          const element = await this.collection.deleteMany({})
-          return element;
+          const carritoCleared = await this.collection.updateOne({id: 1},{ $set: { "carrito": [] }});
+          return carritoCleared;
         } catch (error) {
           return error;
         }
     };
+
+    // async borrarCarrito() {
+    //     try {
+    //       const element = await this.collection.updateOne({})
+    //       return element;
+    //     } catch (error) {
+    //       return error;
+    //     }
+    // };
 }; 
 
 export { HandlerDBCarts };

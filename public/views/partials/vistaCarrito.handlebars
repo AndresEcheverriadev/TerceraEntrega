@@ -1,17 +1,22 @@
 <div id="carritoView" class="carritoContainer">  
-    <h2 class="carritoTitle">Tu carrito</h2>
+    <h2 class="title">Tu carrito</h2>
         {{#if carrito.length}}
             {{#each carrito}}
                 <div class="carritoProductoData">
-                    <h5 id="carritoProductoTitle"> {{this.title}}</h5>
+                    <h5 id="ProductTitle"> {{this.title}}</h5>
                     <h5 id="carritoProductoPrice">${{this.price}}</h5>
-                    <button class="btnRemove" id={{this.id}}>Quitar del carrito</button>
-                    <img id="productThumbnail"  src={{this.thumbnail}} alt=""></img>
+                    <button class="btnRemove" id={{this.id}}>Quitar</button>
                 </div>
             {{/each}}
 
             {{else}}
-                <h2 class="title">No hay productos en tu carrito</h2>
+                <h5 class="title">No hay productos en tu carrito</h5>
         {{/if}}
-        {{!-- <script src='/api/index.js'></script> --}}
+        <div class="totalText">
+            <h5>Total:$500</h5>
+        </div>
+        <div class="carritoButtonsContainer">
+            <button class="btnPagar" id="btnPagar">Proceder al pago</button>
+            <button class="btnBorrar" id="btnBorrar">Borrar carrito</button>
+        </div>
 </div>
