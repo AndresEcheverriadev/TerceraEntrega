@@ -20,9 +20,9 @@ const usersSchema = mongoose.Schema({
     telefono:Number,
     prefijo:String,
     foto:String,
-    id:Number,
     carrito:Array
 })
+
 
 const productsModel = mongoose.model(collectionProducts,productsSchema);
 const usersModel = mongoose.model(collectionUsers,usersSchema);

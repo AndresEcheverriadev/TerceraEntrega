@@ -9,7 +9,7 @@ class HandlerDBCarts {
     async listarCarrito(id) {
       console.log(' listar carrito id recibido'+ id);
         try {
-          const usuario = await this.collection.findOne({id: id});
+          const usuario = await this.collection.findOne({_id: id});
           const carrito = usuario.carrito
           return carrito;
         } catch (error) {
@@ -22,7 +22,7 @@ class HandlerDBCarts {
       const product = await this.product.findOne({id: idProducto}) 
 
       try {
-        const newElement =  await this.collection.findOneAndUpdate( { id: idUsuario},{ $push: { "carrito": product }} );
+        const newElement =  await this.collection.findOneAndUpdate( { _id: idUsuario},{ $push: { "carrito": product }} );
         return newElement;
       } catch (error) {
         return error;
@@ -33,7 +33,7 @@ class HandlerDBCarts {
     
       const product = await this.product.findOne({id: idProducto}) 
       try {
-        const clearElement =  await this.collection.findOneAndUpdate( { id: idUsuario},{ $pull: { "carrito": product }} );
+        const clearElement =  await this.collection.findOneAndUpdate( {_id: idUsuario},{ $pull: { "carrito": product }} );
         return clearElement;
       } catch (error) {
         return error;
@@ -42,7 +42,7 @@ class HandlerDBCarts {
 
     async borrarCarrito(idUsuario) {
         try {
-          const carritoCleared = await this.collection.updateOne({id: idUsuario},{ $set: { "carrito": [] }});
+          const carritoCleared = await this.collection.updateOne({_id: idUsuario},{ $set: { "carrito": [] }});
           return carritoCleared;
         } catch (error) {
           return error;

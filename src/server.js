@@ -16,10 +16,11 @@ import { logger,ErrorLogger } from "./config/logger.js";
 import {MongoDBService} from './db/mongoDBService.js';
 import {HandlerDBProductos} from './db/mongoHandlerProducts.js';
 import {HandlerDBCarts} from './db/mongoHandlerCarts.js';
-import {transporter,mailOptions} from './config/mailer.js'
+import {transporter,mailOptions} from './config/mailer.js';
 
 MongoDBService.initMongoDB(); 
 initializePassport();
+
 
 
 // const modoCluster = process.argv[3] == "cluster";
@@ -103,7 +104,7 @@ app.get("/", (req, res) => {
 app.get("/home", (req, res) => {
   req.logger.info("peticion recibida al servidor desde /home");
   req.session.contador++;
-  res.render("vistaContenedor", { name: req.user.name, id: req.user.id });
+  res.render("vistaContenedor", { name: req.user.name, id: req.user._id });
 });
 
 app.get("/login", (req, res) => {
@@ -182,14 +183,14 @@ io.on("connection", async (socket) => {
   socket.emit("start", 'starting');
 
   socket.on("idUsuario", async (idUsuario) => {
-    const usuario = parseInt(idUsuario);
+    const usuario = idUsuario;
     console.log('socket id usuario recibido: '+usuario)
     io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
   });
 
   socket.on("addToCart", async ({idProducto,idUsuario}) => {
     const producto =  parseInt(idProducto);
-    const usuario = parseInt(idUsuario);
+    const usuario = idUsuario;
     console.log('socket id usuario: '+ usuario);
     const carrito = await Cart.agregarAlCarrito(producto,usuario);
     io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
@@ -197,13 +198,13 @@ io.on("connection", async (socket) => {
 
   socket.on("removeFromCart", async ({idProducto,idUsuario}) => {
     const producto =  parseInt(idProducto);
-    const usuario = parseInt(idUsuario);
+    const usuario = idUsuario;
     const carrito = await Cart.borrarDelCarrito(producto,usuario);
     io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
   });
 
   socket.on("clearCart", async ({idUsuario}) => {
-    const usuario = parseInt(idUsuario);
+    const usuario = idUsuario;
     const carritoNuevo = await Cart.borrarCarrito(usuario);
     io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
   });
