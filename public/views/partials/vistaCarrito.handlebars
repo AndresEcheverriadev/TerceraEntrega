@@ -4,19 +4,21 @@
             {{#each carrito}}
                 <div class="carritoProductoData">
                     <h5 id="ProductTitle"> {{this.title}}</h5>
-                    <h5 id="carritoProductoPrice">${{this.price}}</h5>
+                    <h5 id="carritoProductoPrice">$<p id="productoPriceCarrito" class="productoPriceCarrito">{{this.price}}</p></h5>
                     <button class="btnRemove" id={{this.id}}>Quitar</button>
                 </div>
             {{/each}}
 
+            <div class="totalText">
+                <h4>Total: $<p id="sumaCarrito"></p></h4>
+            </div>
+            <div class="carritoButtonsContainer">
+            <button class="btnPagar" id="btnPagar">Proceder al pago</button>
+            <button class="btnBorrar" id="btnBorrar">Borrar carrito</button>
+            </div>
+
             {{else}}
                 <h5 class="title">No hay productos en tu carrito</h5>
         {{/if}}
-        <div class="totalText">
-            <h5>Total:$500</h5>
-        </div>
-        <div class="carritoButtonsContainer">
-            <button class="btnPagar" id="btnPagar">Proceder al pago</button>
-            <button class="btnBorrar" id="btnBorrar">Borrar carrito</button>
-        </div>
+       
 </div>

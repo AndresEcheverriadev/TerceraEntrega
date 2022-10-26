@@ -1,10 +1,8 @@
 const socket = io();
 
 socket.on("start", (arg) => {
-  console.log('recibiendo socket')
-  alert(arg);
   const idHeader = document.getElementsByClassName("userDataId")[0].id;
-  socket.emit("idUsuario", {idUsuario:idHeader});
+  socket.emit("idUsuario", idHeader);
 });
 
 socket.on("products", async (products) => {
@@ -32,6 +30,8 @@ socket.on("carrito", async (carrito) => {
 
   const btnBorrar = document.getElementById("btnBorrar");
   btnBorrar.addEventListener('click',clearCart);
+
+  calcCart();
 });
 
 const createCarritoView = async (carrito) => {
@@ -53,4 +53,21 @@ function removeFromCart() {
 function clearCart() {
   const idHeader = document.getElementsByClassName("userDataId")[0].id;
   socket.emit("clearCart",{idUsuario: idHeader});
+}
+
+function calcCart() {
+  const totalCarrito = []
+  const productosPrices = document.getElementsByClassName("productoPriceCarrito");
+  const arrayProductos = Array.prototype.slice.call(productosPrices);
+  for (index = 0; index < arrayProductos.length; ++index) {  
+    totalCarrito.push(parseInt(arrayProductos[index].innerText))
+  };
+  const initialValue = 0;
+  const sumaCarritoTotal = totalCarrito.reduce((previous,current) => previous+current,initialValue);
+
+  if(productosPrices) {
+    console.log(sumaCarritoTotal);
+    const sumaCarrito = document.getElementById('sumaCarrito');
+    sumaCarrito.innerHTML = sumaCarritoTotal;
+  }
 }

@@ -183,12 +183,10 @@ io.on("connection", async (socket) => {
 
   socket.on("idUsuario", async (idUsuario) => {
     const usuario = parseInt(idUsuario);
+    console.log('socket id usuario recibido: '+usuario)
     io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
   });
 
-
-  
-  
   socket.on("addToCart", async ({idProducto,idUsuario}) => {
     const producto =  parseInt(idProducto);
     const usuario = parseInt(idUsuario);
@@ -225,6 +223,8 @@ console.log("args ->", process.argv.slice(2));
 
 // andres@correox.cl
 // 123456A
+// benjamin@correox.cl
+// 12345678B
 // taskkill /f /im node.exe
 // taskkill /f /im nginx.exe
 // taskkill /f /im pm2.exe
