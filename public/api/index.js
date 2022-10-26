@@ -1,5 +1,12 @@
 const socket = io();
 
+socket.on("start", (arg) => {
+  console.log('recibiendo socket')
+  alert(arg);
+  const idHeader = document.getElementsByClassName("userDataId")[0].id;
+  socket.emit("idUsuario", {idUsuario:idHeader});
+});
+
 socket.on("products", async (products) => {
   const template = await createProductView(products);
   document.getElementById("productsView").innerHTML = template;
@@ -34,14 +41,16 @@ const createCarritoView = async (carrito) => {
 };
 
 function addToCart() {
-  socket.emit("addToCart", {idProducto: this.id});
+  const idHeader = document.getElementsByClassName("userDataId")[0].id;
+  socket.emit("addToCart", {idProducto: this.id, idUsuario: idHeader });
 }
 
 function removeFromCart() {
-  socket.emit("removeFromCart", {idProducto: this.id,idUsuario:this.name});
+  const idHeader = document.getElementsByClassName("userDataId")[0].id;
+  socket.emit("removeFromCart", {idProducto: this.id,idUsuario:idHeader});
 }
 
 function clearCart() {
-  console.log('btn clear');
-  socket.emit("clearCart",{idUsuario: 1});
+  const idHeader = document.getElementsByClassName("userDataId")[0].id;
+  socket.emit("clearCart",{idUsuario: idHeader});
 }

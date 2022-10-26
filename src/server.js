@@ -103,7 +103,7 @@ app.get("/", (req, res) => {
 app.get("/home", (req, res) => {
   req.logger.info("peticion recibida al servidor desde /home");
   req.session.contador++;
-  res.render("vistaContenedor", { name: req.user.name});
+  res.render("vistaContenedor", { name: req.user.name, id: req.user.id });
 });
 
 app.get("/login", (req, res) => {
@@ -172,40 +172,45 @@ app.get("*", function (req, res) {
   res.status(404).send("Esta página no existe");
 });
 
-io.on("connection", async (socket,req) => {
+io.on("connection", async (socket) => {
   
-  const userName = req.user.name
   
 
   console.log(`Cliente conectado en ${socket.id}`);
 
-  socket.emit("products", await Product.listarTodo(),userName);
-  socket.emit("carrito", await Cart.listarCarrito(1));
+  socket.emit("products", await Product.listarTodo());
+  socket.emit("start", 'starting');
+
+  socket.on("idUsuario", async (idUsuario) => {
+    const usuario = parseInt(idUsuario);
+    io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
+  });
+
+
+  
   
   socket.on("addToCart", async ({idProducto,idUsuario}) => {
     const producto =  parseInt(idProducto);
-    const usuario = 1;
-    console.log('data from productos: '+idProducto+' '+producto);
+    const usuario = parseInt(idUsuario);
+    console.log('socket id usuario: '+ usuario);
     const carrito = await Cart.agregarAlCarrito(producto,usuario);
     io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
   });
 
   socket.on("removeFromCart", async ({idProducto,idUsuario}) => {
     const producto =  parseInt(idProducto);
-    const usuario = 1;
+    const usuario = parseInt(idUsuario);
     const carrito = await Cart.borrarDelCarrito(producto,usuario);
     io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
   });
 
   socket.on("clearCart", async ({idUsuario}) => {
-    const usuario =  idUsuario;
+    const usuario = parseInt(idUsuario);
     const carritoNuevo = await Cart.borrarCarrito(usuario);
     io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
   });
 
 });
-
-
 
 
 const server = httpServer.listen(process.env.PORT || PORT , () => {

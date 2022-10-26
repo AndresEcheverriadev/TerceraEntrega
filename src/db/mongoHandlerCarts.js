@@ -7,10 +7,10 @@ class HandlerDBCarts {
   }
 
     async listarCarrito(id) {
-      console.log('data recibida desde server'+ id);
+      console.log(' listar carrito id recibido'+ id);
       // const user = await this.collection.findOne({id: id});
         try {
-          const usuario = await this.collection.findOne({id: 1});
+          const usuario = await this.collection.findOne({id: id});
           const carrito = usuario.carrito
           // console.log('all recibido desde mongo:'+ carrito)
           return carrito;
@@ -22,7 +22,6 @@ class HandlerDBCarts {
     async agregarAlCarrito(idProducto,idUsuario) {
     
       const product = await this.product.findOne({id: idProducto}) 
-      console.log('data recibida en funcion db: '+ product);
 
       try {
         const newElement =  await this.collection.findOneAndUpdate( { id: idUsuario},{ $push: { "carrito": product }} );
