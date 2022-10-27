@@ -1,6 +1,6 @@
 import passport from "passport";
 import local from "passport-local";
-import {usersModel} from "../db/dbModels.js";
+import { usersModel } from "../db/dbModels.js";
 import { createHash, isValidPassword } from "./bcrypt.js";
 
 const LocalStrategy = local.Strategy;
@@ -12,8 +12,10 @@ const initializePassport = () => {
       { passReqToCallback: true, usernameField: "email" },
       async (req, email, password, done) => {
         try {
-          const { name,direccion,edad,telefono,foto,prefijo } = req.body;
-          if (!name || !email || !password ) return done(null, false);
+          const { name, direccion, edad, telefono, archivo, prefijo } =
+            req.body;
+          let avatar = archivo + "-" + Date.now();
+          if (!name || !email || !password) return done(null, false);
           let exists = await usersModel.findOne({ email: email });
           if (exists) return done(null, false);
           let result = await usersModel.create({
@@ -24,7 +26,7 @@ const initializePassport = () => {
             edad,
             telefono,
             prefijo,
-            foto
+            avatar,
           });
           return done(null, result);
         } catch (error) {

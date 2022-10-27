@@ -17,6 +17,7 @@ import { MongoDBService } from "./db/mongoDBService.js";
 import { HandlerDBProductos } from "./db/mongoHandlerProducts.js";
 import { HandlerDBCarts } from "./db/mongoHandlerCarts.js";
 import { transporter, mailOptions } from "./config/mailer.js";
+import multer from "multer";
 
 MongoDBService.initMongoDB();
 initializePassport();
@@ -54,6 +55,17 @@ const PORT = config.Port;
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 const Product = new HandlerDBProductos();
 const Cart = new HandlerDBCarts();
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./public/images/uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + "-" + Date.now());
+  },
+});
+
+const upload = multer({ storage: storage });
 
 let varUser = "";
 
@@ -94,6 +106,16 @@ app.use(passport.session());
 app.engine("handlebars", handlebars.engine());
 app.set("views", path.join(__dirname, "../public/views"));
 app.set("view engine", "handlebars");
+
+app.post("/uploadfile", upload.single("archivo"), (req, res, next) => {
+  const file = req.file;
+  if (!file) {
+    const error = new Error("Debes subir un archivo");
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  res.send(file);
+});
 
 app.get("/", (req, res) => {
   req.logger.info("peticion recibida al servidor");
