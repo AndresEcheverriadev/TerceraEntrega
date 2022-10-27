@@ -12,16 +12,14 @@ import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import cluster from "cluster";
 import { cpus } from "os";
-import { logger,ErrorLogger } from "./config/logger.js";
-import {MongoDBService} from './db/mongoDBService.js';
-import {HandlerDBProductos} from './db/mongoHandlerProducts.js';
-import {HandlerDBCarts} from './db/mongoHandlerCarts.js';
-import {transporter,mailOptions} from './config/mailer.js';
+import { logger, ErrorLogger } from "./config/logger.js";
+import { MongoDBService } from "./db/mongoDBService.js";
+import { HandlerDBProductos } from "./db/mongoHandlerProducts.js";
+import { HandlerDBCarts } from "./db/mongoHandlerCarts.js";
+import { transporter, mailOptions } from "./config/mailer.js";
 
-MongoDBService.initMongoDB(); 
+MongoDBService.initMongoDB();
 initializePassport();
-
-
 
 // const modoCluster = process.argv[3] == "cluster";
 
@@ -46,7 +44,6 @@ initializePassport();
 //   });
 // } else {}
 
-
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -55,9 +52,14 @@ const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 const PORT = config.Port;
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
-const Product = new HandlerDBProductos
-const Cart = new HandlerDBCarts
+const Product = new HandlerDBProductos();
+const Cart = new HandlerDBCarts();
 
+let varUser = "";
+
+function getVarUser(user) {
+  return (varUser = user);
+}
 
 app.use(express.json());
 
@@ -66,8 +68,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.use(logger());
-
-
 
 app.use(
   session({
@@ -104,7 +104,8 @@ app.get("/", (req, res) => {
 app.get("/home", (req, res) => {
   req.logger.info("peticion recibida al servidor desde /home");
   req.session.contador++;
-  res.render("vistaContenedor", { name: req.user.name, id: req.user._id });
+  getVarUser(req.user._id);
+  res.render("vistaContenedor", { name: req.user.name });
 });
 
 app.get("/login", (req, res) => {
@@ -138,7 +139,7 @@ app.post(
   async (req, res) => {
     try {
       const info = await transporter.sendMail(mailOptions);
-      WarnLogger.info("mail de registro enviado");    
+      WarnLogger.info("mail de registro enviado");
     } catch (error) {
       ErrorLogger.error("error en mail de registro");
     }
@@ -174,45 +175,28 @@ app.get("*", function (req, res) {
 });
 
 io.on("connection", async (socket) => {
-  
-  
-
-  console.log(`Cliente conectado en ${socket.id}`);
-
   socket.emit("products", await Product.listarTodo());
-  socket.emit("start", 'starting');
+  socket.emit("carrito", await Cart.listarCarrito(varUser));
 
-  socket.on("idUsuario", async (idUsuario) => {
-    const usuario = idUsuario;
-    console.log('socket id usuario recibido: '+usuario)
-    io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
+  socket.on("addToCart", async ({ idProducto }) => {
+    const producto = parseInt(idProducto);
+    const carrito = await Cart.agregarAlCarrito(producto, varUser);
+    io.sockets.emit("carrito", await Cart.listarCarrito(varUser));
   });
 
-  socket.on("addToCart", async ({idProducto,idUsuario}) => {
-    const producto =  parseInt(idProducto);
-    const usuario = idUsuario;
-    console.log('socket id usuario: '+ usuario);
-    const carrito = await Cart.agregarAlCarrito(producto,usuario);
-    io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
+  socket.on("removeFromCart", async ({ idProducto }) => {
+    const producto = parseInt(idProducto);
+    const carrito = await Cart.borrarDelCarrito(producto, varUser);
+    io.sockets.emit("carrito", await Cart.listarCarrito(varUser));
   });
 
-  socket.on("removeFromCart", async ({idProducto,idUsuario}) => {
-    const producto =  parseInt(idProducto);
-    const usuario = idUsuario;
-    const carrito = await Cart.borrarDelCarrito(producto,usuario);
-    io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
+  socket.on("clearCart", async () => {
+    const carritoNuevo = await Cart.borrarCarrito(varUser);
+    io.sockets.emit("carrito", await Cart.listarCarrito(varUser));
   });
-
-  socket.on("clearCart", async ({idUsuario}) => {
-    const usuario = idUsuario;
-    const carritoNuevo = await Cart.borrarCarrito(usuario);
-    io.sockets.emit("carrito", await Cart.listarCarrito(usuario));
-  });
-
 });
 
-
-const server = httpServer.listen(process.env.PORT || PORT , () => {
+const server = httpServer.listen(process.env.PORT || PORT, () => {
   console.log(`Servidor escuchando en puerto ${PORT}`);
 });
 
@@ -231,6 +215,5 @@ console.log("args ->", process.argv.slice(2));
 // taskkill /f /im pm2.exe
 // pm2 start ecosystem.config.cjs
 // Name:	Noemi Feil
-// Username:	noemi.feil@ethereal.email 
+// Username:	noemi.feil@ethereal.email
 // Password:	TQTNSbWZfZvbTe9bgV
-
